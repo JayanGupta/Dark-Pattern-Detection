@@ -7,7 +7,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 
-> **AI-powered full-stack application for detecting dark patterns on web pages.** Scans any URL or HTML for manipulative UI/UX patterns using a fine-tuned DistilBERT multi-label classifier.
+> **Fine-tuned DistilBERT multi-label classifier wrapped in a FastAPI inference pipeline, detecting seven dark pattern taxonomies from live DOM-scraped text with sub-2s latency.
 
 ---
 
