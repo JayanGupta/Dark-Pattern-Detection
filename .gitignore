@@ -1,0 +1,53 @@
+# ─── Python ──────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.so
+
+# ─── Virtual Environment ─────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ─── IDE ─────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ─── OS ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Data ────────────────────────────────────────────────────
+data/raw/
+data/processed/
+
+# ─── Model Checkpoints ──────────────────────────────────────
+model/checkpoints/
+model/evaluation_results.json
+!model/checkpoints/.gitkeep
+
+# ─── Node.js ─────────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# ─── Environment ─────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Jupyter ─────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ─── Logs ────────────────────────────────────────────────────
+*.log
+logs/
