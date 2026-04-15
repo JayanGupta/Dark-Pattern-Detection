@@ -1,10 +1,3 @@
-"""
-Data Augmentation Pipeline.
-
-Generates synthetic samples for underrepresented dark pattern categories
-using template-based generation and synonym replacement.
-"""
-
 import csv
 import os
 import re
@@ -17,12 +10,7 @@ from data.label_mapping import NUM_LABELS, CATEGORIES, CATEGORY_TO_IDX
 BASE_DIR = os.path.dirname(__file__)
 PROCESSED_DIR = os.path.join(BASE_DIR, "processed")
 
-# ─── Synthetic Templates ──────────────────────────────────────────────
-# Templates for categories that are underrepresented or missing from
-# the Princeton dataset. Each template generates variations.
-
 SYNTHETIC_TEMPLATES = {
-    # ── Disguised Ads (index 6) ──
     "Disguised Ads": [
         "Sponsored: {product} - Shop Now",
         "Promoted: Discover {product} today",
@@ -45,8 +33,6 @@ SYNTHETIC_TEMPLATES = {
         "{brand} ad: Don't miss this deal",
         "This is a paid promotion for {brand}",
     ],
-
-    # ── Hidden Costs (index 5) ──
     "Hidden Costs": [
         "Processing fee of $3.99 will be added at checkout",
         "Service charge: $2.50 (added at final step)",
@@ -69,8 +55,6 @@ SYNTHETIC_TEMPLATES = {
         "Admin fee of $4.50 applies to all orders",
         "Gift wrapping: $3.99 (auto-selected)",
     ],
-
-    # ── Forced Continuity (index 3) ──
     "Forced Continuity": [
         "Your free trial will automatically convert to a paid subscription at $9.99/month",
         "Cancel anytime. Terms and conditions apply. See fine print for details.",
@@ -93,8 +77,6 @@ SYNTHETIC_TEMPLATES = {
         "Annual subscription auto-renewed. See terms.",
         "Cancel within 24 hours of renewal to avoid charges",
     ],
-
-    # ── Urgency / Scarcity (index 0) — additional variety ──
     "Urgency / Scarcity": [
         "Only {n} left in stock — order soon!",
         "Hurry! This deal expires in {time}",
@@ -107,8 +89,6 @@ SYNTHETIC_TEMPLATES = {
         "⚡ Lightning deal: {discount}% off for the next {time}",
         "Offer expires soon — secure your order now",
     ],
-
-    # ── Confirm-shaming (index 4) — additional variety ──
     "Confirm-shaming": [
         "No thanks, I hate saving money",
         "I don't want to improve my life",
@@ -123,7 +103,6 @@ SYNTHETIC_TEMPLATES = {
     ],
 }
 
-# Fill-in values for templates
 PRODUCTS = [
     "Premium Wireless Headphones", "Organic Skin Care Kit", "Smart Fitness Watch",
     "Professional Camera Lens", "Luxury Bath Set", "Portable Bluetooth Speaker",
@@ -140,9 +119,6 @@ TIMES = ["2 hours", "30 minutes", "3 hours", "45 minutes", "1 hour", "15 minutes
 DISCOUNTS = ["20", "30", "50", "40", "60", "75", "25"]
 NUMBERS = ["2", "3", "5", "7", "1", "4", "8", "10"]
 
-
-# ─── Synonym Replacement ─────────────────────────────────────────────
-
 SYNONYM_MAP = {
     "buy": ["purchase", "get", "grab", "order", "snag"],
     "hurry": ["rush", "act fast", "be quick", "don't wait", "move fast"],
@@ -158,9 +134,7 @@ SYNONYM_MAP = {
     "popular": ["trending", "hot", "best-selling", "top-rated", "in-demand"],
 }
 
-
 def synonym_replace(text: str, n_replacements: int = 1) -> str:
-    """Replace up to n words with their synonyms."""
     words = text.split()
     replaced = 0
     result = []
@@ -168,7 +142,6 @@ def synonym_replace(text: str, n_replacements: int = 1) -> str:
         lower = word.lower().strip(".,!?:;")
         if lower in SYNONYM_MAP and replaced < n_replacements and random.random() > 0.5:
             synonym = random.choice(SYNONYM_MAP[lower])
-            # Preserve original casing
             if word[0].isupper():
                 synonym = synonym.capitalize()
             result.append(synonym)
@@ -177,11 +150,7 @@ def synonym_replace(text: str, n_replacements: int = 1) -> str:
             result.append(word)
     return " ".join(result)
 
-
-# ─── Template Filling ─────────────────────────────────────────────────
-
 def fill_template(template: str) -> str:
-    """Fill a template with random values."""
     text = template
     text = text.replace("{product}", random.choice(PRODUCTS))
     text = text.replace("{brand}", random.choice(BRANDS))
@@ -190,11 +159,7 @@ def fill_template(template: str) -> str:
     text = text.replace("{n}", random.choice(NUMBERS))
     return text
 
-
-# ─── Augmentation Pipeline ────────────────────────────────────────────
-
 def generate_synthetic_samples(target_per_category: int = 200, seed: int = 42) -> list:
-    """Generate synthetic labeled samples from templates."""
     random.seed(seed)
     records = []
 
@@ -206,7 +171,6 @@ def generate_synthetic_samples(target_per_category: int = 200, seed: int = 42) -
             template = random.choice(templates)
             text = fill_template(template)
 
-            # Also apply synonym replacement for variety
             if random.random() > 0.5:
                 text = synonym_replace(text, n_replacements=2)
 
@@ -222,21 +186,15 @@ def generate_synthetic_samples(target_per_category: int = 200, seed: int = 42) -
 
     return records
 
-
 def augment_existing(records: list, augment_factor: int = 2, seed: int = 42) -> list:
-    """
-    Augment existing records using synonym replacement.
-    Returns the original records plus augmented copies.
-    """
     random.seed(seed)
     augmented = []
 
     for rec in records:
-        # Only augment positive samples
         if sum(rec["labels"]) > 0:
             for _ in range(augment_factor):
                 new_text = synonym_replace(rec["text"], n_replacements=2)
-                if new_text != rec["text"]:  # Only keep if changed
+                if new_text != rec["text"]:
                     augmented.append({
                         "text": new_text,
                         "labels": rec["labels"].copy(),
@@ -245,11 +203,7 @@ def augment_existing(records: list, augment_factor: int = 2, seed: int = 42) -> 
 
     return augmented
 
-
-# ─── Main ─────────────────────────────────────────────────────────────
-
 def augment():
-    """Run the full augmentation pipeline."""
     print("=" * 60)
     print("Dark Pattern Detection — Data Augmentation")
     print("=" * 60)
@@ -260,7 +214,6 @@ def augment():
         print("  → Run preprocess.py first!")
         return False
 
-    # Load existing training data
     print("\n→ Loading existing training data...")
     existing_records = []
     with open(train_path, "r", encoding="utf-8") as f:
@@ -273,7 +226,6 @@ def augment():
             })
     print(f"  ✓ Loaded {len(existing_records)} existing records")
 
-    # Count per-category distribution
     cat_counts = Counter()
     for rec in existing_records:
         for i, v in enumerate(rec["labels"]):
@@ -284,20 +236,16 @@ def augment():
     for cat in CATEGORIES:
         print(f"    {cat:25s} → {cat_counts.get(cat, 0):5d}")
 
-    # Generate synthetic samples
     print("\n→ Generating synthetic samples...")
     synthetic = generate_synthetic_samples(target_per_category=200)
     print(f"  ✓ Generated {len(synthetic)} synthetic samples")
 
-    # Augment underrepresented existing samples
     print("\n→ Augmenting existing samples via synonym replacement...")
     augmented = augment_existing(existing_records, augment_factor=1)
     print(f"  ✓ Generated {len(augmented)} augmented samples")
 
-    # Merge all
     all_records = existing_records + synthetic + augmented
 
-    # Deduplicate
     seen = set()
     unique = []
     for rec in all_records:
@@ -308,7 +256,6 @@ def augment():
 
     print(f"\n  Total after merge + dedup: {len(unique)} records")
 
-    # Save augmented training data
     augmented_path = os.path.join(PROCESSED_DIR, "train_augmented.csv")
     with open(augmented_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
@@ -317,7 +264,6 @@ def augment():
             writer.writerow([rec["text"], json.dumps(rec["labels"]), rec["source"]])
     print(f"  ✓ Saved augmented data → {augmented_path}")
 
-    # Print final stats
     final_counts = Counter()
     for rec in unique:
         for i, v in enumerate(rec["labels"]):
@@ -332,7 +278,6 @@ def augment():
     print("✓ Augmentation complete!")
     print("=" * 60)
     return True
-
 
 if __name__ == "__main__":
     import sys

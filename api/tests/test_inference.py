@@ -118,7 +118,7 @@ class TestInferencePerformance:
     )
     def test_inference_under_2_seconds(self):
         """Inference must complete in under 2 seconds per page (~100 segments)."""
-        from model.inference import DarkPatternDetector
+        from model.detector import DarkPatternDetector
         
         detector = DarkPatternDetector()
         test_texts = [
@@ -143,7 +143,7 @@ class TestInferencePerformance:
     )
     def test_multi_label_output_format(self):
         """Each prediction should have the correct format."""
-        from model.inference import DarkPatternDetector
+        from model.detector import DarkPatternDetector
         
         detector = DarkPatternDetector()
         results = detector.predict(

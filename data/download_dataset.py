@@ -1,16 +1,7 @@
-"""
-Dataset Downloader.
-
-Downloads the Princeton/Mathur dark patterns CSV and the Yamanalab ec-darkpattern TSV
-into data/raw/ for subsequent preprocessing.
-"""
-
 import os
 import sys
 import urllib.request
 import urllib.error
-
-# ─── Configuration ────────────────────────────────────────────────────
 
 RAW_DIR = os.path.join(os.path.dirname(__file__), "raw")
 
@@ -25,11 +16,7 @@ DATASETS = {
     ),
 }
 
-
-# ─── Download Logic ───────────────────────────────────────────────────
-
 def download_file(url: str, dest_path: str) -> bool:
-    """Download a file from a URL to a local path."""
     if os.path.exists(dest_path):
         print(f"  [OK] Already exists: {os.path.basename(dest_path)}")
         return True
@@ -51,9 +38,7 @@ def download_file(url: str, dest_path: str) -> bool:
         print(f"  [FAIL] Unexpected error downloading {os.path.basename(dest_path)}: {e}")
         return False
 
-
 def download_all():
-    """Download all required datasets."""
     os.makedirs(RAW_DIR, exist_ok=True)
     print("=" * 60)
     print("Dark Pattern Detection -- Dataset Downloader")
@@ -74,7 +59,6 @@ def download_all():
     
     print("[OK] All datasets ready!")
     return True
-
 
 if __name__ == "__main__":
     success = download_all()

@@ -1,15 +1,7 @@
-"""
-Model Training Script.
-
-Fine-tunes DistilBERT for multi-label dark pattern classification
-using HuggingFace Trainer API.
-"""
-
 import os
 import sys
 import json
-import numpy as np
-
+import math
 import torch
 from transformers import (
     AutoModelForSequenceClassification,
@@ -18,9 +10,7 @@ from transformers import (
     TrainingArguments,
     EarlyStoppingCallback,
 )
-from sklearn.metrics import f1_score, precision_score, recall_score
 
-# Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from model.config import (
@@ -32,76 +22,29 @@ from model.config import (
     DEVICE, FP16, LOGGING_STEPS, SAVE_STEPS, EVAL_STEPS,
     SAVE_TOTAL_LIMIT, LOAD_BEST_MODEL_AT_END, METRIC_FOR_BEST_MODEL,
 )
-import math
 from data.dataset_loader import DarkPatternDataset
-from data.label_mapping import CATEGORIES
-
-
-# --- Metrics ----------------------------------------------------------
-
-def compute_metrics(eval_pred):
-    """Compute multi-label classification metrics."""
-    logits, labels = eval_pred
-    # Apply sigmoid to convert logits to probabilities
-    probs = 1 / (1 + np.exp(-logits))
-    # Threshold to binary predictions
-    preds = (probs >= DEFAULT_THRESHOLD).astype(int)
-
-    # Compute metrics
-    f1_micro = f1_score(labels, preds, average="micro", zero_division=0)
-    f1_macro = f1_score(labels, preds, average="macro", zero_division=0)
-    f1_weighted = f1_score(labels, preds, average="weighted", zero_division=0)
-    precision_macro = precision_score(labels, preds, average="macro", zero_division=0)
-    recall_macro = recall_score(labels, preds, average="macro", zero_division=0)
-
-    # Per-category F1
-    per_category_f1 = f1_score(labels, preds, average=None, zero_division=0)
-
-    metrics = {
-        "f1_micro": f1_micro,
-        "f1_macro": f1_macro,
-        "f1_weighted": f1_weighted,
-        "precision_macro": precision_macro,
-        "recall_macro": recall_macro,
-    }
-
-    # Add per-category metrics
-    for i, cat in enumerate(CATEGORIES):
-        if i < len(per_category_f1):
-            safe_name = cat.replace(" / ", "_").replace("-", "_").replace(" ", "_").lower()
-            metrics[f"f1_{safe_name}"] = per_category_f1[i]
-
-    return metrics
-
-
-# --- Training ---------------------------------------------------------
+from model.metrics import compute_metrics
 
 def train():
-    """Run the full training pipeline."""
     print("=" * 60)
     print("Dark Pattern Detection — Model Training")
     print(f"Device: {DEVICE} | FP16: {FP16}")
     print("=" * 60)
 
-    # Determine training data path
     train_path = TRAIN_DATA_PATH
     if not os.path.exists(train_path):
         train_path = TRAIN_DATA_FALLBACK
     if not os.path.exists(train_path):
         print(f"[ERROR] Training data not found!")
-        print("  -> Run data/preprocess.py first!")
         return
 
     if not os.path.exists(TEST_DATA_PATH):
         print(f"[ERROR] Test data not found!")
-        print("  -> Run data/preprocess.py first!")
         return
 
-    # Load tokenizer
     print(f"\n-> Loading tokenizer: {MODEL_NAME}")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
-    # Load datasets
     print(f"\n-> Loading training data from: {os.path.basename(train_path)}")
     train_dataset = DarkPatternDataset(
         csv_path=train_path,
@@ -118,7 +61,6 @@ def train():
     )
     print(f"  [OK] {len(test_dataset)} test samples")
 
-    # Load model
     print(f"\n-> Loading model: {MODEL_NAME}")
     model = AutoModelForSequenceClassification.from_pretrained(
         MODEL_NAME,
@@ -127,12 +69,9 @@ def train():
     )
     print(f"  [OK] Model loaded ({sum(p.numel() for p in model.parameters()) / 1e6:.1f}M parameters)")
 
-    # Create output directories
     os.makedirs(CHECKPOINT_DIR, exist_ok=True)
     os.makedirs(BEST_MODEL_DIR, exist_ok=True)
 
-    # Training arguments
-    # Compute warmup_steps from warmup_ratio (warmup_ratio is deprecated in v5.2)
     total_steps = math.ceil(len(train_dataset) / (BATCH_SIZE * GRADIENT_ACCUMULATION_STEPS)) * NUM_EPOCHS
     warmup_steps = int(total_steps * WARMUP_RATIO)
 
@@ -160,7 +99,6 @@ def train():
         remove_unused_columns=False,
     )
 
-    # Initialize trainer
     trainer = Trainer(
         model=model,
         args=training_args,
@@ -170,26 +108,22 @@ def train():
         callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],
     )
 
-    # Train!
     print(f"\n{'-' * 60}")
     print("Starting training...")
     print(f"{'-' * 60}")
     train_result = trainer.train()
 
-    # Save best model
     print(f"\n-> Saving best model to {BEST_MODEL_DIR}")
     trainer.save_model(BEST_MODEL_DIR)
     tokenizer.save_pretrained(BEST_MODEL_DIR)
     print("  [OK] Model and tokenizer saved")
 
-    # Save training metrics
     metrics = train_result.metrics
     metrics_path = os.path.join(CHECKPOINT_DIR, "train_metrics.json")
     with open(metrics_path, "w") as f:
         json.dump(metrics, f, indent=2)
     print(f"  [OK] Training metrics saved -> {metrics_path}")
 
-    # Final evaluation
     print(f"\n{'-' * 60}")
     print("Final evaluation on test set...")
     print(f"{'-' * 60}")
@@ -207,7 +141,6 @@ def train():
     print("[OK] Training complete!")
     print(f"  Best model saved to: {BEST_MODEL_DIR}")
     print(f"{'=' * 60}")
-
 
 if __name__ == "__main__":
     train()
