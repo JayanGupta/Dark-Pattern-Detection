@@ -1,15 +1,15 @@
 """
-Web Page Scraper.
+Web Page Scraper
 
-Extracts HTML content from a URL using httpx + BeautifulSoup.
+Downloads the HTML content from a URL so we can analyze it.
+Uses httpx (an async HTTP library) with fake browser headers
+to avoid being blocked by websites.
 """
 
 import asyncio
-from typing import Optional
-
 import httpx
 
-# Rotate user agents to reduce blocking
+# Pretend to be a real browser so websites don't block us
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -19,28 +19,27 @@ USER_AGENTS = [
 _ua_index = 0
 
 
-def _get_user_agent() -> str:
-    """Rotate through user agents."""
+def _get_user_agent():
+    """Cycle through different user agent strings to avoid detection."""
     global _ua_index
     ua = USER_AGENTS[_ua_index % len(USER_AGENTS)]
     _ua_index += 1
     return ua
 
 
-async def scrape_url(url: str, timeout: float = 15.0) -> str:
+async def scrape_url(url, timeout=15.0):
     """
-    Fetch HTML content from a URL.
-    
+    Download the HTML from a URL.
+
     Args:
-        url: The URL to scrape.
-        timeout: Request timeout in seconds.
-        
+        url:     The web page URL to scrape
+        timeout: How long to wait before giving up (seconds)
+
     Returns:
-        Raw HTML string.
-        
+        The raw HTML as a string
+
     Raises:
-        httpx.HTTPError: If the request fails.
-        ValueError: If the URL is invalid or unreachable.
+        ValueError: If the URL is invalid or the request fails
     """
     headers = {
         "User-Agent": _get_user_agent(),
@@ -57,8 +56,9 @@ async def scrape_url(url: str, timeout: float = 15.0) -> str:
             max_redirects=5,
         ) as client:
             response = await client.get(url, headers=headers)
-            response.raise_for_status()
+            response.raise_for_status()  # Raise error for 4xx/5xx status codes
             return response.text
+
     except httpx.TimeoutException:
         raise ValueError(f"Request timed out after {timeout}s: {url}")
     except httpx.HTTPStatusError as e:
@@ -67,6 +67,6 @@ async def scrape_url(url: str, timeout: float = 15.0) -> str:
         raise ValueError(f"Failed to fetch URL: {e}")
 
 
-def scrape_url_sync(url: str, timeout: float = 15.0) -> str:
-    """Synchronous wrapper for scrape_url."""
+def scrape_url_sync(url, timeout=15.0):
+    """Same as scrape_url but synchronous (blocking). For non-async code."""
     return asyncio.run(scrape_url(url, timeout))

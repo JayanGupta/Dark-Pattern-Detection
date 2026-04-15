@@ -75,9 +75,9 @@ export default function ScanHistory({ onRescan }) {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Clock size={14} className="text-indigo-400" />
+          <Clock size={14} className="text-cyan-400" />
           <span className="text-sm font-semibold text-slate-300">Recent Scans</span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-400 font-medium">
+          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 font-medium">
             {history.length}
           </span>
         </div>
@@ -124,7 +124,7 @@ export default function ScanHistory({ onRescan }) {
             {item.url !== 'Raw HTML' && (
               <button
                 onClick={() => onRescan?.(item.url)}
-                className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg hover:bg-white/5 text-slate-500 hover:text-indigo-400 cursor-pointer"
+                className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg hover:bg-white/5 text-slate-500 hover:text-cyan-400 cursor-pointer"
                 title="Re-scan"
               >
                 <RotateCcw size={12} />
@@ -138,7 +138,7 @@ export default function ScanHistory({ onRescan }) {
       {history.length > 3 && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="w-full mt-3 flex items-center justify-center gap-1 text-xs text-slate-500 hover:text-indigo-400 transition-colors cursor-pointer py-1"
+          className="w-full mt-3 flex items-center justify-center gap-1 text-xs text-slate-500 hover:text-cyan-400 transition-colors cursor-pointer py-1"
         >
           {expanded ? (
             <>Show Less <ChevronUp size={12} /></>

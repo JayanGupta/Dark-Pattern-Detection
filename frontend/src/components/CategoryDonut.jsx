@@ -47,7 +47,7 @@ export default function CategoryDonut({ summary = {} }) {
       name: cat,
       count,
       fraction,
-      color: CATEGORY_COLORS[cat]?.color || '#8b5cf6',
+      color: CATEGORY_COLORS[cat]?.color || '#ff2d7c',
       offset: cumulativeOffset,
       length: Math.max(length - gap, 2),
       dasharray: `${Math.max(length - gap, 2)} ${circumference - Math.max(length - gap, 2)}`,

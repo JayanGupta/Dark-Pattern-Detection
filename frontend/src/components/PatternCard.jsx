@@ -44,7 +44,7 @@ export default function PatternCard({ pattern, index }) {
         {isLongText && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="mt-2 flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+            className="mt-2 flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
           >
             {expanded ? (
               <>Show Less <ChevronUp size={12} /></>
@@ -58,7 +58,7 @@ export default function PatternCard({ pattern, index }) {
       {/* Categories with confidence bars */}
       <div className="space-y-2.5">
         {pattern.categories.map((cat, i) => {
-          const config = CATEGORY_COLORS[cat.name] || { color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)' };
+          const config = CATEGORY_COLORS[cat.name] || { color: '#ff2d7c', bg: 'rgba(139,92,246,0.12)' };
           const percentage = (cat.confidence * 100).toFixed(1);
 
           return (

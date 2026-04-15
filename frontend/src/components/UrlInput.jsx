@@ -58,7 +58,7 @@ export default function UrlInput({ onAnalyze, isLoading }) {
           onClick={() => setMode('url')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer ${
             mode === 'url'
-              ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-white border border-indigo-500/30 shadow-lg shadow-indigo-500/10'
+              ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
               : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
           }`}
         >
@@ -70,7 +70,7 @@ export default function UrlInput({ onAnalyze, isLoading }) {
           onClick={() => setMode('html')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer ${
             mode === 'html'
-              ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-white border border-indigo-500/30 shadow-lg shadow-indigo-500/10'
+              ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
               : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
           }`}
         >
@@ -122,7 +122,7 @@ export default function UrlInput({ onAnalyze, isLoading }) {
           id="analyze-button"
           type="submit"
           disabled={isLoading}
-          className="mt-5 w-full group relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:via-purple-500 hover:to-indigo-500 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 text-base cursor-pointer shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 animate-gradient"
+          className="mt-5 w-full group relative overflow-hidden bg-gradient-to-r from-cyan-600 via-fuchsia-600 to-cyan-600 hover:from-cyan-500 hover:via-fuchsia-500 hover:to-cyan-500 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 text-base cursor-pointer shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 animate-gradient"
           style={{ backgroundSize: '200% 200%' }}
         >
           {/* Shimmer effect */}

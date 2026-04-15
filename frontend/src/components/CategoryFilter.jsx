@@ -20,7 +20,7 @@ export default function CategoryFilter({ activeCategories, onChange }) {
         <button
           type="button"
           onClick={() => onChange(allActive ? [] : [...ALL_CATEGORIES])}
-          className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+          className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
         >
           {allActive ? 'Clear All' : 'Select All'}
         </button>

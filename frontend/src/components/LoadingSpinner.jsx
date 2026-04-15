@@ -30,15 +30,15 @@ export default function LoadingSpinner() {
       <div className="relative w-28 h-28 mb-8">
         {/* Outer ring */}
         <div
-          className="absolute inset-0 rounded-full border-2 border-indigo-500/20"
+          className="absolute inset-0 rounded-full border-2 border-cyan-500/20"
           style={{ animation: 'rotate 8s linear infinite' }}
         />
         {/* Spinning ring 1 */}
         <div
           className="absolute inset-0 rounded-full border-2 border-transparent"
           style={{
-            borderTopColor: 'rgba(99, 102, 241, 0.7)',
-            borderRightColor: 'rgba(139, 92, 246, 0.3)',
+            borderTopColor: 'rgba(0, 240, 255, 0.7)',
+            borderRightColor: 'rgba(255, 45, 124, 0.3)',
             animation: 'rotate 1.2s linear infinite',
           }}
         />
@@ -47,7 +47,7 @@ export default function LoadingSpinner() {
           className="absolute inset-2 rounded-full border-2 border-transparent"
           style={{
             borderBottomColor: 'rgba(168, 85, 247, 0.6)',
-            borderLeftColor: 'rgba(139, 92, 246, 0.2)',
+            borderLeftColor: 'rgba(255, 45, 124, 0.2)',
             animation: 'rotate 1.8s linear infinite reverse',
           }}
         />
@@ -60,10 +60,10 @@ export default function LoadingSpinner() {
           }}
         />
         {/* Pulsing glow */}
-        <div className="absolute inset-4 rounded-full bg-indigo-500/5 animate-pulse" />
+        <div className="absolute inset-4 rounded-full bg-cyan-500/5 animate-pulse" />
         {/* Center icon */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <ShieldAlert size={26} className="text-indigo-400 animate-glow-pulse" />
+          <ShieldAlert size={26} className="text-cyan-400 animate-glow-pulse" />
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export default function LoadingSpinner() {
                   className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                   style={{
                     backgroundColor:
-                      status === 'active' ? 'rgba(139, 92, 246, 0.15)' :
+                      status === 'active' ? 'rgba(255, 45, 124, 0.15)' :
                       status === 'completed' ? 'rgba(34, 197, 94, 0.1)' :
                       'rgba(255, 255, 255, 0.03)',
                     transition: 'background-color 0.4s ease',
@@ -115,7 +115,7 @@ export default function LoadingSpinner() {
                   </p>
                   <p className="text-[10px]" style={{
                     color:
-                      status === 'active' ? '#8b5cf6' :
+                      status === 'active' ? '#ff2d7c' :
                       status === 'completed' ? '#64748b' :
                       '#334155',
                     transition: 'color 0.4s ease',
@@ -132,7 +132,7 @@ export default function LoadingSpinner() {
                   style={{
                     backgroundColor:
                       i < activeStep ? 'rgba(34, 197, 94, 0.3)' :
-                      i === activeStep ? 'rgba(139, 92, 246, 0.3)' :
+                      i === activeStep ? 'rgba(255, 45, 124, 0.3)' :
                       'rgba(255, 255, 255, 0.05)',
                     transition: 'background-color 0.4s ease',
                   }}

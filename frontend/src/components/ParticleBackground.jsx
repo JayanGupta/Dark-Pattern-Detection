@@ -17,8 +17,8 @@ export default function ParticleBackground() {
 
     const PARTICLE_COUNT = 60;
     const CONNECTION_DISTANCE = 120;
-    const PARTICLE_COLOR = '139, 92, 246'; // purple
-    const PARTICLE_COLOR_ALT = '99, 102, 241'; // indigo
+    const PARTICLE_COLOR = '255, 45, 124'; // purple
+    const PARTICLE_COLOR_ALT = '0, 240, 255'; // indigo
 
     const resize = () => {
       canvas.width = window.innerWidth;

@@ -19,7 +19,7 @@ export default function GlowCard({
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    spotlightRef.current.style.background = `radial-gradient(300px circle at ${x}px ${y}px, rgba(139, 92, 246, 0.06), transparent 60%)`;
+    spotlightRef.current.style.background = `radial-gradient(300px circle at ${x}px ${y}px, rgba(255, 45, 124, 0.06), transparent 60%)`;
   }, []);
 
   return (

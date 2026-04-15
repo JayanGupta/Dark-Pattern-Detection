@@ -40,7 +40,7 @@ export default function ResultsPanel({ results, threshold, activeCategories }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors truncate max-w-xs"
+            className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors truncate max-w-xs"
           >
             {url}
           </a>

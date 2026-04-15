@@ -9,7 +9,7 @@ export default function ConfidenceSlider({ value, onChange }) {
           Confidence Threshold
         </label>
         <span
-          className="text-sm font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-lg"
+          className="text-sm font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-lg"
         >
           {(value * 100).toFixed(0)}%
         </span>
@@ -25,7 +25,7 @@ export default function ConfidenceSlider({ value, onChange }) {
         onChange={(e) => onChange(parseFloat(e.target.value))}
         className="w-full h-2 rounded-full appearance-none cursor-pointer"
         style={{
-          background: `linear-gradient(to right, #6366f1 0%, #8b5cf6 ${value * 100}%, rgba(255,255,255,0.08) ${value * 100}%, rgba(255,255,255,0.08) 100%)`,
+          background: `linear-gradient(to right, #00f0ff 0%, #ff2d7c ${value * 100}%, rgba(255,255,255,0.08) ${value * 100}%, rgba(255,255,255,0.08) 100%)`,
         }}
       />
 

@@ -47,7 +47,7 @@ export default function SummaryStats({ results }) {
             icon={<TrendingUp size={18} />}
             label="Segments Scanned"
             value={total_segments}
-            color="#8b5cf6"
+            color="#ff2d7c"
             delay={0.15}
           />
           <StatCard
@@ -74,7 +74,7 @@ export default function SummaryStats({ results }) {
         {/* Category Distribution Donut */}
         <GlowCard className="span-2" padding="p-6" delay={0.3}>
           <h3 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
-            <Target size={14} className="text-indigo-400" />
+            <Target size={14} className="text-cyan-400" />
             Pattern Distribution
           </h3>
           <CategoryDonut summary={summary} />
