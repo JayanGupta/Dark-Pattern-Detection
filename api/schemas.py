@@ -2,8 +2,8 @@ from pydantic import BaseModel, model_validator
 
 
 class AnalyzeRequest(BaseModel):
-    url: str = None
-    html: str = None
+    url: str | None = None
+    html: str | None = None
     threshold: float = 0.7
 
     @model_validator(mode="after")
@@ -23,11 +23,11 @@ class PatternMatch(BaseModel):
     categories: list
     severity: str
     severity_score: float
-    location: str = None
+    location: str | None = None
 
 
 class AnalyzeResponse(BaseModel):
-    url: str = None
+    url: str | None = None
     total_segments: int
     flagged_segments: int
     patterns: list

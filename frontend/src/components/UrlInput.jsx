@@ -50,32 +50,32 @@ export default function UrlInput({ onAnalyze, isLoading }) {
   };
 
   return (
-    <div className="glass-card p-6 md:p-8 animate-fade-in animated-border" style={{ '--gradient-angle': '0deg' }}>
+    <div className="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-6 md:p-8">
       {/* Mode Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 p-1 bg-muted rounded-lg w-full md:w-max border border-border">
         <button
           type="button"
           onClick={() => setMode('url')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer ${
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-colors cursor-pointer ${
             mode === 'url'
-              ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
-              : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
           }`}
         >
           <Globe size={16} />
-          Enter URL
+          URL
         </button>
         <button
           type="button"
           onClick={() => setMode('html')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer ${
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-colors cursor-pointer ${
             mode === 'html'
-              ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
-              : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
           }`}
         >
           <Code size={16} />
-          Paste HTML
+          HTML
         </button>
       </div>
 
@@ -83,7 +83,7 @@ export default function UrlInput({ onAnalyze, isLoading }) {
       <form onSubmit={handleSubmit}>
         {mode === 'url' ? (
           <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
               <Globe size={20} />
             </div>
             <input
@@ -94,7 +94,7 @@ export default function UrlInput({ onAnalyze, isLoading }) {
               onChange={(e) => setUrl(e.target.value)}
               placeholder={PLACEHOLDER_URLS[placeholderIdx]}
               disabled={isLoading}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-slate-500/50 focus:outline-none input-glow transition-all duration-300 text-base"
+              className="w-full bg-input border border-border rounded-lg py-3.5 pl-12 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-all text-base"
             />
           </div>
         ) : (
@@ -105,13 +105,13 @@ export default function UrlInput({ onAnalyze, isLoading }) {
             placeholder="<html>...</html>"
             rows={6}
             disabled={isLoading}
-            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-white placeholder-slate-500/50 focus:outline-none input-glow transition-all duration-300 font-mono text-sm resize-y"
+            className="w-full bg-input border border-border rounded-lg p-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-all font-mono text-sm resize-y"
           />
         )}
 
         {/* Error */}
         {error && (
-          <div className="flex items-center gap-2 mt-3 text-red-400 text-sm animate-fade-in">
+          <div className="flex items-center gap-2 mt-3 text-destructive text-sm font-medium">
             <AlertTriangle size={14} />
             {error}
           </div>
@@ -122,12 +122,8 @@ export default function UrlInput({ onAnalyze, isLoading }) {
           id="analyze-button"
           type="submit"
           disabled={isLoading}
-          className="mt-5 w-full group relative overflow-hidden bg-gradient-to-r from-cyan-600 via-fuchsia-600 to-cyan-600 hover:from-cyan-500 hover:via-fuchsia-500 hover:to-cyan-500 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 text-base cursor-pointer shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 animate-gradient"
-          style={{ backgroundSize: '200% 200%' }}
+          className="mt-5 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3.5 px-6 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base shadow-sm"
         >
-          {/* Shimmer effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-
           {isLoading ? (
             <>
               <Loader2 size={20} className="animate-spin" />

@@ -36,24 +36,21 @@ export async function checkHealth() {
   return response.data;
 }
 
-/**
- * Map category names to CSS class names.
- */
 export const CATEGORY_COLORS = {
-  'Urgency / Scarcity': { class: 'cat-urgency', color: '#ff4444', bg: 'rgba(255, 68, 68, 0.12)' },
-  'Misdirection': { class: 'cat-misdirection', color: '#ffaa00', bg: 'rgba(255, 170, 0, 0.12)' },
-  'Social Proof': { class: 'cat-social-proof', color: '#ff2d7c', bg: 'rgba(255, 45, 124, 0.12)' },
-  'Forced Continuity': { class: 'cat-forced-continuity', color: '#00f0ff', bg: 'rgba(0, 240, 255, 0.12)' },
-  'Confirm-shaming': { class: 'cat-confirm-shaming', color: '#ff00ff', bg: 'rgba(255, 0, 255, 0.12)' },
-  'Hidden Costs': { class: 'cat-hidden-costs', color: '#00ff88', bg: 'rgba(0, 255, 136, 0.12)' },
-  'Disguised Ads': { class: 'cat-disguised-ads', color: '#00aaff', bg: 'rgba(0, 170, 255, 0.12)' },
+  'Urgency / Scarcity': { class: 'cat-urgency', color: '#b91c1c', bg: '#b91c1c1A' },
+  'Misdirection': { class: 'cat-misdirection', color: '#9b2c2c', bg: '#9b2c2c1A' },
+  'Social Proof': { class: 'cat-social-proof', color: '#7f1d1d', bg: '#7f1d1d1A' },
+  'Forced Continuity': { class: 'cat-forced-continuity', color: '#b45309', bg: '#b453091A' },
+  'Confirm-shaming': { class: 'cat-confirm-shaming', color: '#92400e', bg: '#92400e1A' },
+  'Hidden Costs': { class: 'cat-hidden-costs', color: '#9b2c2c', bg: '#9b2c2c1A' },
+  'Disguised Ads': { class: 'cat-disguised-ads', color: '#b45309', bg: '#b453091A' },
 };
 
 export const SEVERITY_COLORS = {
-  critical: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)', label: 'Critical' },
-  high: { color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)', label: 'High' },
-  medium: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)', label: 'Medium' },
-  low: { color: '#22c55e', bg: 'rgba(34, 197, 94, 0.15)', label: 'Low' },
+  critical: { color: '#991b1b', bg: '#991b1b1A', label: 'Critical' },
+  high: { color: '#b91c1c', bg: '#b91c1c1A', label: 'High' },
+  medium: { color: '#b45309', bg: '#b453091A', label: 'Medium' },
+  low: { color: '#9b2c2c', bg: '#9b2c2c1A', label: 'Low' },
 };
 
 export default apiClient;

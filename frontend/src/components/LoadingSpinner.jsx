@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ShieldAlert, Globe, Code2, Cpu, BarChart3 } from 'lucide-react';
+import { Loader2, Globe, Code2, Cpu, BarChart3 } from 'lucide-react';
 
 const PIPELINE_STEPS = [
   { label: 'Connecting', sublabel: 'Fetching page content...', icon: Globe, duration: 2000 },
@@ -27,51 +27,15 @@ export default function LoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center py-16 animate-fade-in">
       {/* Central scanner animation */}
-      <div className="relative w-28 h-28 mb-8">
-        {/* Outer ring */}
-        <div
-          className="absolute inset-0 rounded-full border-2 border-cyan-500/20"
-          style={{ animation: 'rotate 8s linear infinite' }}
-        />
-        {/* Spinning ring 1 */}
-        <div
-          className="absolute inset-0 rounded-full border-2 border-transparent"
-          style={{
-            borderTopColor: 'rgba(0, 240, 255, 0.7)',
-            borderRightColor: 'rgba(255, 45, 124, 0.3)',
-            animation: 'rotate 1.2s linear infinite',
-          }}
-        />
-        {/* Spinning ring 2 */}
-        <div
-          className="absolute inset-2 rounded-full border-2 border-transparent"
-          style={{
-            borderBottomColor: 'rgba(168, 85, 247, 0.6)',
-            borderLeftColor: 'rgba(255, 45, 124, 0.2)',
-            animation: 'rotate 1.8s linear infinite reverse',
-          }}
-        />
-        {/* Spinning ring 3 */}
-        <div
-          className="absolute inset-4 rounded-full border-2 border-transparent"
-          style={{
-            borderTopColor: 'rgba(192, 132, 252, 0.5)',
-            animation: 'rotate 2.5s linear infinite',
-          }}
-        />
-        {/* Pulsing glow */}
-        <div className="absolute inset-4 rounded-full bg-cyan-500/5 animate-pulse" />
-        {/* Center icon */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <ShieldAlert size={26} className="text-cyan-400 animate-glow-pulse" />
-        </div>
+      <div className="relative mb-8 text-primary">
+        <Loader2 size={64} className="animate-spin" />
       </div>
 
       {/* Title */}
-      <p className="text-lg font-semibold text-slate-200 mb-2 tracking-tight">
+      <p className="text-lg font-bold text-foreground mb-2 tracking-tight">
         Analyzing for Dark Patterns
       </p>
-      <p className="text-xs text-slate-500 mb-8">This may take a few seconds...</p>
+      <p className="text-xs font-medium text-muted-foreground mb-8">This may take a few seconds...</p>
 
       {/* Pipeline steps */}
       <div className="relative space-y-0 w-64">
@@ -81,14 +45,14 @@ export default function LoadingSpinner() {
 
           return (
             <div key={i} className="relative">
-              <div className={`pipeline-step ${status} py-3 flex items-center gap-3 rounded-xl px-2`}>
+              <div className={`py-3 flex items-center gap-3 rounded-xl px-2 ${status === 'active' ? 'opacity-100' : 'opacity-60'}`}>
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                   style={{
                     backgroundColor:
-                      status === 'active' ? 'rgba(255, 45, 124, 0.15)' :
-                      status === 'completed' ? 'rgba(34, 197, 94, 0.1)' :
-                      'rgba(255, 255, 255, 0.03)',
+                      status === 'active' ? 'var(--primary)' :
+                      status === 'completed' ? 'var(--muted)' :
+                      'var(--muted)',
                     transition: 'background-color 0.4s ease',
                   }}
                 >
@@ -96,28 +60,25 @@ export default function LoadingSpinner() {
                     size={14}
                     style={{
                       color:
-                        status === 'active' ? '#a78bfa' :
-                        status === 'completed' ? '#22c55e' :
-                        '#475569',
+                        status === 'active' ? 'var(--primary-foreground)' :
+                        status === 'completed' ? 'var(--primary)' :
+                        'var(--muted-foreground)',
                       transition: 'color 0.4s ease',
                     }}
                   />
                 </div>
                 <div>
-                  <p className="text-sm font-medium" style={{
+                  <p className="text-sm font-semibold" style={{
                     color:
-                      status === 'active' ? '#e2e8f0' :
-                      status === 'completed' ? '#94a3b8' :
-                      '#475569',
+                      status === 'active' ? 'var(--primary)' :
+                      status === 'completed' ? 'var(--foreground)' :
+                      'var(--muted-foreground)',
                     transition: 'color 0.4s ease',
                   }}>
                     {step.label}
                   </p>
-                  <p className="text-[10px]" style={{
-                    color:
-                      status === 'active' ? '#ff2d7c' :
-                      status === 'completed' ? '#64748b' :
-                      '#334155',
+                  <p className="text-xs font-medium" style={{
+                    color: status === 'active' ? 'var(--primary)' : 'var(--muted-foreground)',
                     transition: 'color 0.4s ease',
                   }}>
                     {status === 'completed' ? 'Done' : step.sublabel}
@@ -128,12 +89,11 @@ export default function LoadingSpinner() {
               {/* Connector line */}
               {i < PIPELINE_STEPS.length - 1 && (
                 <div
-                  className="ml-[19px] w-0.5 h-2"
+                  className="ml-[19px] w-0.5 h-3"
                   style={{
                     backgroundColor:
-                      i < activeStep ? 'rgba(34, 197, 94, 0.3)' :
-                      i === activeStep ? 'rgba(255, 45, 124, 0.3)' :
-                      'rgba(255, 255, 255, 0.05)',
+                      i < activeStep ? 'var(--primary)' :
+                      'var(--border)',
                     transition: 'background-color 0.4s ease',
                   }}
                 />

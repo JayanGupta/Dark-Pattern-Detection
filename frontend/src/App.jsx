@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ShieldAlert, BookOpen, Search, Activity, ExternalLink } from 'lucide-react';
-import ParticleBackground from './components/ParticleBackground';
+import { ShieldAlert, BookOpen, Search, Activity, Moon, Sun, Code2 } from 'lucide-react';
 import UrlInput from './components/UrlInput';
 import ConfidenceSlider from './components/ConfidenceSlider';
 import CategoryFilter from './components/CategoryFilter';
@@ -14,13 +13,14 @@ import { analyzeUrl, checkHealth, CATEGORY_COLORS } from './utils/api';
 const ALL_CATEGORIES = Object.keys(CATEGORY_COLORS);
 
 export default function App() {
-  const [view, setView] = useState('scan'); // 'scan' or 'learn'
+  const [view, setView] = useState('scan');
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [threshold, setThreshold] = useState(0.7);
   const [activeCategories, setActiveCategories] = useState([...ALL_CATEGORIES]);
   const [apiHealthy, setApiHealthy] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
 
   // Simple hash routing
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function App() {
       setView(hash);
     };
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Initial check
+    handleHashChange();
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
@@ -47,6 +47,15 @@ export default function App() {
     const interval = setInterval(check, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  // Theme toggle side-effect
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   const handleAnalyze = async ({ url, html }) => {
     setIsLoading(true);
@@ -70,50 +79,56 @@ export default function App() {
   }, [threshold]);
 
   return (
-    <div className="min-h-screen relative text-slate-200">
-      <ParticleBackground />
-
+    <div className="min-h-screen relative bg-background text-foreground transition-colors duration-200">
       {/* ─── Header ─────────────────────────────────────── */}
-      <header className="border-b border-cyan-500/10 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
-              <ShieldAlert size={22} className="text-cyan-400" />
+            <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary">
+              <ShieldAlert size={22} />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white tracking-tight leading-tight">
-                Dark Pattern <span className="text-cyan-400">Detector</span>
+              <h1 className="text-lg font-bold tracking-tight leading-tight">
+                Dark Pattern <span className="text-primary font-serif italic">Detector</span>
               </h1>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">AI Neural Net</span>
-                <span className={`w-1.5 h-1.5 rounded-full ${apiHealthy ? 'bg-green-400 shadow-[0_0_8px_rgba(0,255,136,0.5)]' : 'bg-red-500'}`} />
+                <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest font-semibold">AI Neural Net</span>
+                <span className={`w-1.5 h-1.5 rounded-full ${apiHealthy ? 'bg-green-500' : 'bg-red-500'}`} />
               </div>
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/5">
+          <nav className="hidden md:flex items-center gap-1 bg-muted p-1 rounded-lg border border-border">
             <a 
               href="#scan" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${view === 'scan' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-inner' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-all ${view === 'scan' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-background/50'}`}
             >
               <Search size={16} /> Scan
             </a>
             <a 
               href="#learn" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${view === 'learn' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-inner' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-all ${view === 'learn' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-background/50'}`}
             >
               <BookOpen size={16} /> Learn
             </a>
           </nav>
 
           <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Toggle themes"
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
             <a 
               href="https://github.com" 
               target="_blank" 
-              className="p-2 rounded-lg hover:bg-white/5 text-slate-400 hover:text-cyan-400 transition-colors"
+              rel="noreferrer"
+              className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
             >
-              <Github size={20} />
+              <Code2 size={20} />
             </a>
           </div>
         </div>
@@ -127,13 +142,13 @@ export default function App() {
           <div className="py-12 animate-fade-in">
             {/* Hero */}
             <section className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold mb-6 animate-float">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold mb-6">
                 <Activity size={14} /> System Online
               </div>
-              <h2 className="text-5xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter italic">
-                Deconstruct <span className="gradient-text italic">Manipulation</span>
+              <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-tight">
+                Deconstruct <span className="text-primary italic font-serif">Manipulation</span>
               </h2>
-              <p className="text-slate-400 max-w-2xl mx-auto text-base leading-relaxed font-medium">
+              <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed font-medium">
                 Advanced AI core identifies deceptive user interfaces using fine-tuned neural patterns.
                 Expose hidden costs, false urgency, and trick architecture in real-time.
               </p>
@@ -147,17 +162,17 @@ export default function App() {
               <div className="lg:col-span-1 space-y-6">
                 <ScanHistory onRescan={handleRescan} />
                 {!localStorage.getItem('dpd_scan_history') && (
-                  <div className="glass-card p-6 border-l-4 border-l-cyan-400/50">
-                    <h3 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-4">Transmission Tips</h3>
-                    <ul className="space-y-3 text-xs text-slate-400 font-medium">
+                  <div className="bg-card text-card-foreground rounded-xl border border-border p-6 shadow-sm">
+                    <h3 className="text-xs font-bold text-primary uppercase tracking-widest mb-4">Transmission Tips</h3>
+                    <ul className="space-y-3 text-sm text-muted-foreground font-medium">
                       <li className="flex gap-2">
-                        <span className="text-cyan-400">01</span> Scan e-commerce payloads
+                        <span className="text-primary">01</span> Scan e-commerce payloads
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-fuchsia-400">02</span> Adjust confidence signal
+                        <span className="text-chart-4">02</span> Adjust confidence signal
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-green-400">03</span> Filter by neural category
+                        <span className="text-chart-5">03</span> Filter by neural category
                       </li>
                     </ul>
                   </div>
@@ -167,14 +182,14 @@ export default function App() {
 
             {/* Error Display */}
             {error && (
-              <div className="max-w-3xl mx-auto mb-12 glass-card p-5 border-red-500/30 bg-red-500/5 animate-slide-up">
+              <div className="max-w-3xl mx-auto mb-12 bg-destructive/10 border border-destructive/20 p-5 rounded-xl text-destructive">
                 <div className="flex items-center gap-4">
-                  <div className="p-2 rounded-lg bg-red-500/20">
-                    <ShieldAlert size={20} className="text-red-400" />
+                  <div className="p-2 rounded-lg bg-destructive/20">
+                    <ShieldAlert size={20} />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-red-100 italic uppercase">System Error Detected</p>
-                    <p className="text-xs text-red-300 font-medium">{error}</p>
+                    <p className="text-sm font-bold uppercase">System Error Detected</p>
+                    <p className="text-sm font-medium">{error}</p>
                   </div>
                 </div>
               </div>
@@ -198,15 +213,11 @@ export default function App() {
               </div>
             ) : (
               /* Empty State */
-              <div className="text-center py-16 opacity-50">
-                <div className="relative w-32 h-32 mx-auto mb-8">
-                  <div className="absolute inset-0 rounded-full border-2 border-cyan-500/10 animate-ping" />
-                  <div className="absolute inset-4 rounded-full border border-cyan-500/20 border-dashed animate-spin" style={{ animationDuration: '10s' }} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Search size={40} className="text-cyan-500/20" />
-                  </div>
+              <div className="text-center py-16 opacity-60">
+                <div className="relative w-24 h-24 mx-auto mb-6 flex items-center justify-center p-4 bg-muted border border-border rounded-full">
+                  <Search size={32} className="text-primary opacity-50" />
                 </div>
-                <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Awaiting Input Signal</p>
+                <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Awaiting Input Signal</p>
               </div>
             )}
           </div>
@@ -214,20 +225,19 @@ export default function App() {
       </main>
 
       {/* ─── Footer ─────────────────────────────────────── */}
-      <footer className="border-t border-cyan-500/10 py-12 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4 opacity-50">
-            <span className="h-[1px] w-8 bg-slate-700" />
-            <Activity size={12} className="text-cyan-400" />
-            <span className="h-[1px] w-8 bg-slate-700" />
+      <footer className="border-t border-border py-8 mt-12 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-sm font-medium text-muted-foreground font-mono">
+            Architected by Jayan Gupta
           </div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black">
-            DistilBERT Neural Core v1.0.4 · React x Tailwind v4 Cyber Edition
-          </p>
-          <p className="text-[10px] text-slate-700 mt-2">
-            © 2026 Dark Pattern Detector · Ethical Intelligence Unit
-          </p>
+          <div className="text-xs text-muted-foreground text-center md:text-right">
+            <p className="font-semibold mb-1">
+              DistilBERT Neural Core v1.0.4 · React x Tailwind
+            </p>
+            <p className="opacity-70">
+              © 2026 Dark Pattern Detector
+            </p>
+          </div>
         </div>
       </footer>
     </div>

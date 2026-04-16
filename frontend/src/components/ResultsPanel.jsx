@@ -24,12 +24,12 @@ export default function ResultsPanel({ results, threshold, activeCategories }) {
   return (
     <div className="animate-fade-in delay-300">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+      <div className="flex items-center justify-between mb-4 mt-6">
+        <h2 className="text-lg font-bold flex items-center gap-2">
           {filteredPatterns.length > 0 ? (
-            <ShieldAlert size={20} className="text-red-400" />
+            <ShieldAlert size={20} className="text-destructive" />
           ) : (
-            <ShieldCheck size={20} className="text-green-400" />
+            <ShieldCheck size={20} className="text-green-600" />
           )}
           {filteredPatterns.length > 0
             ? `${filteredPatterns.length} Dark Pattern${filteredPatterns.length > 1 ? 's' : ''} Detected`
@@ -40,7 +40,7 @@ export default function ResultsPanel({ results, threshold, activeCategories }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors truncate max-w-xs"
+            className="text-xs font-medium text-primary hover:text-primary/80 transition-colors truncate max-w-xs"
           >
             {url}
           </a>
@@ -59,9 +59,9 @@ export default function ResultsPanel({ results, threshold, activeCategories }) {
           ))}
         </div>
       ) : (
-        <div className="glass-card p-12 text-center">
-          <ShieldCheck size={48} className="mx-auto mb-4 text-green-400/60" />
-          <p className="text-slate-400 text-sm">
+        <div className="bg-card border border-border shadow-sm p-12 text-center rounded-xl">
+          <ShieldCheck size={48} className="mx-auto mb-4 text-green-600 opacity-60" />
+          <p className="text-muted-foreground text-sm font-medium">
             {patterns.length > 0
               ? 'All detected patterns are filtered out. Try lowering the confidence threshold or expanding category filters.'
               : 'This page appears clean! No manipulative dark patterns were detected.'}

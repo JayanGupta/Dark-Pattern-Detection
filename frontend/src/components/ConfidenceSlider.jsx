@@ -1,15 +1,15 @@
 export default function ConfidenceSlider({ value, onChange }) {
   return (
-    <div className="glass-card p-5 animate-fade-in delay-100">
-      <div className="flex items-center justify-between mb-3">
+    <div className="bg-card text-card-foreground border border-border shadow-sm rounded-xl p-5 animate-fade-in delay-100 flex flex-col justify-center">
+      <div className="flex items-center justify-between mb-4">
         <label
           htmlFor="confidence-slider"
-          className="text-sm font-medium text-slate-300"
+          className="text-sm font-bold"
         >
           Confidence Threshold
         </label>
         <span
-          className="text-sm font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-lg"
+          className="text-xs font-black text-primary bg-primary/10 px-2.5 py-1 rounded-md"
         >
           {(value * 100).toFixed(0)}%
         </span>
@@ -23,15 +23,15 @@ export default function ConfidenceSlider({ value, onChange }) {
         step="0.05"
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-2 rounded-full appearance-none cursor-pointer"
+        className="w-full h-2.5 rounded-full appearance-none cursor-pointer"
         style={{
-          background: `linear-gradient(to right, #00f0ff 0%, #ff2d7c ${value * 100}%, rgba(255,255,255,0.08) ${value * 100}%, rgba(255,255,255,0.08) 100%)`,
+          background: `linear-gradient(to right, var(--destructive) 0%, var(--primary) ${value * 100}%, var(--muted) ${value * 100}%, var(--muted) 100%)`,
         }}
       />
 
-      <div className="flex justify-between mt-1.5 text-xs text-slate-500">
+      <div className="flex justify-between mt-2 text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
         <span>More Results</span>
-        <span>Higher Confidence</span>
+        <span>High Confidence</span>
       </div>
     </div>
   );

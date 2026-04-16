@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import SeverityBadge from './SeverityBadge';
-import GlowCard from './GlowCard';
 import { CATEGORY_COLORS } from '../utils/api';
 import { ChevronDown, ChevronUp, MapPin } from 'lucide-react';
 
@@ -14,21 +13,17 @@ export default function PatternCard({ pattern, index }) {
     : pattern.text.slice(0, TEXT_TRUNCATE_LENGTH) + '...';
 
   return (
-    <GlowCard
-      padding="p-5"
-      delay={index * 0.06}
-      className=""
-    >
+    <div className="bg-card text-card-foreground border border-border shadow-sm rounded-xl p-5 hover:shadow-md transition-shadow">
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <SeverityBadge severity={pattern.severity} />
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-slate-600 uppercase tracking-wider font-medium">Score</span>
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Score</span>
           <span
-            className="text-sm font-bold tabular-nums"
+            className="text-sm font-black tabular-nums"
             style={{
-              color: pattern.severity_score >= 0.7 ? '#ef4444' :
-                     pattern.severity_score >= 0.4 ? '#f59e0b' : '#22c55e',
+              color: pattern.severity_score >= 0.7 ? 'var(--destructive)' :
+                     pattern.severity_score >= 0.4 ? 'var(--chart-4)' : 'var(--chart-5)',
             }}
           >
             {(pattern.severity_score * 100).toFixed(0)}%
@@ -37,14 +32,14 @@ export default function PatternCard({ pattern, index }) {
       </div>
 
       {/* Flagged Text */}
-      <div className="relative mb-4">
-        <p className="text-sm text-slate-200 leading-relaxed bg-white/[0.02] rounded-xl p-3.5 border border-white/5 font-mono text-[13px]">
+      <div className="relative mb-5">
+        <p className="text-sm text-foreground leading-relaxed bg-muted rounded-lg p-3.5 border border-border font-mono">
           &ldquo;{displayText}&rdquo;
         </p>
         {isLongText && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="mt-2 flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
+            className="mt-2 flex items-center gap-1 text-xs font-semibold hover:text-primary transition-colors cursor-pointer"
           >
             {expanded ? (
               <>Show Less <ChevronUp size={12} /></>
@@ -56,32 +51,29 @@ export default function PatternCard({ pattern, index }) {
       </div>
 
       {/* Categories with confidence bars */}
-      <div className="space-y-2.5">
+      <div className="space-y-3">
         {pattern.categories.map((cat, i) => {
-          const config = CATEGORY_COLORS[cat.name] || { color: '#ff2d7c', bg: 'rgba(139,92,246,0.12)' };
+          const config = CATEGORY_COLORS[cat.name] || { color: 'var(--primary)', bg: 'var(--muted)' };
           const percentage = (cat.confidence * 100).toFixed(1);
 
           return (
             <div key={i} className="group">
               <div className="flex items-center gap-3">
                 <span
-                  className="text-xs font-medium w-36 shrink-0 truncate transition-colors"
-                  style={{ color: config.color }}
+                  className="text-xs font-bold w-36 shrink-0 truncate transition-colors"
                 >
                   {cat.name}
                 </span>
-                <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+                <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden border border-border">
                   <div
-                    className="h-full rounded-full"
+                    className="h-full rounded-full bg-primary"
                     style={{
                       width: `${percentage}%`,
-                      background: `linear-gradient(90deg, ${config.color}60, ${config.color})`,
                       transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)',
-                      boxShadow: `0 0 8px ${config.color}30`,
                     }}
                   />
                 </div>
-                <span className="text-xs text-slate-400 w-12 text-right tabular-nums font-medium">
+                <span className="text-xs text-muted-foreground w-12 text-right tabular-nums font-bold">
                   {percentage}%
                 </span>
               </div>
@@ -92,11 +84,11 @@ export default function PatternCard({ pattern, index }) {
 
       {/* Location Context */}
       {pattern.location && (
-        <div className="mt-3 pt-3 border-t border-white/5 text-xs text-slate-500 flex items-center gap-1.5">
-          <MapPin size={10} className="shrink-0" />
-          <span className="font-mono text-[11px] truncate">{pattern.location}</span>
+        <div className="mt-4 pt-3 border-t border-border text-xs text-muted-foreground flex items-center gap-1.5">
+          <MapPin size={12} className="shrink-0 text-primary" />
+          <span className="font-mono text-[11px] truncate flex-1">{pattern.location}</span>
         </div>
       )}
-    </GlowCard>
+    </div>
   );
 }
