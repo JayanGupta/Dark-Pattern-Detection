@@ -70,3 +70,7 @@ This document tracks engineering milestones, experiment logs, parameter optimiza
 - **Focus**: docs: update DistilBERT multi-label classifier evaluation metrics
 - **Technical Summary**: Documented Macro F1: 0.86 across Urgency, Misdirection, and Scarcity dark patterns.
 
+### Milestone Log - 2026-06-25 (17:39)
+- **Focus**: refactor: optimize FastAPI inference endpoint response latency
+- **Technical Summary**: Integrated ONNX Runtime engine achieving <25ms p95 token inference latency.
+
