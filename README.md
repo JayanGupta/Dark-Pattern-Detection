@@ -31,19 +31,19 @@ Dark patterns are deceptive UI/UX designs that trick users into unintended actio
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    React Dashboard                       │
-│              (Vite + TailwindCSS v4)                     │
-│  ┌──────────┐  ┌──────────┐  ┌─────────────────────┐   │
-│  │ URL Input│  │ Slider   │  │ Annotated Results    │   │
-│  └────┬─────┘  └──────────┘  └─────────────────────┘   │
+│                    React Dashboard                      │
+│              (Vite + TailwindCSS v4)                    │
+│  ┌──────────┐  ┌──────────┐  ┌─────────────────────┐    │
+│  │ URL Input│  │ Slider   │  │ Annotated Results   │    │
+│  └────┬─────┘  └──────────┘  └─────────────────────┘    │
 └───────┼─────────────────────────────────────────────────┘
         │ POST /analyze
 ┌───────▼─────────────────────────────────────────────────┐
-│                   FastAPI Backend                        │
-│  ┌──────────┐  ┌────────────┐  ┌───────────────────┐   │
-│  │ Scraper  │→ │ Extractor  │→ │ DistilBERT Model  │   │
-│  │ (httpx)  │  │ (BS4)      │  │ (Multi-label CLF) │   │
-│  └──────────┘  └────────────┘  └───────────────────┘   │
+│                   FastAPI Backend                       │
+│  ┌──────────┐  ┌────────────┐  ┌───────────────────┐    │
+│  │ Scraper  │→ │ Extractor  │→ │ DistilBERT Model  │    │
+│  │ (httpx)  │  │ (BS4)      │  │ (Multi-label CLF) │    │
+│  └──────────┘  └────────────┘  └───────────────────┘    │
 └─────────────────────────────────────────────────────────┘
 ```
 
